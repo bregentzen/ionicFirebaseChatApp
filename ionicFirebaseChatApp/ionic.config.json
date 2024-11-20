@@ -1,0 +1,7 @@
+{
+  "name": "ionicFirebaseChatApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
