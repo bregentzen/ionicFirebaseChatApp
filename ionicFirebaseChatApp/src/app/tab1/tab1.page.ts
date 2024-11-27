@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, collectionData, collection, query, orderBy } from '@angular/fire/firestore';
+import { Firestore, collectionData, collection, query, orderBy, addDoc, serverTimestamp } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 interface Message {
@@ -15,17 +15,41 @@ interface Message {
 })
 export class Tab1Page implements OnInit {
   messages$: Observable<Message[]> = new Observable<Message[]>();
+  newMessage: string = '';
+  author: string = '';
 
   constructor(private firestore: Firestore) {}
 
   ngOnInit() {
     try {
-      const messagesCollection = collection(this.firestore, 'room_0');
-      const messagesQuery = query(messagesCollection, orderBy('timestamp'));
+      this.author = localStorage.getItem('username') || 'Anonym';
+      const messagesCollection = collection(this.firestore, 'room_1');
+      const messagesQuery = query(messagesCollection, orderBy('timestamp', 'desc'));
       this.messages$ = collectionData(messagesQuery, { idField: 'id' }) as Observable<Message[]>;
-      console.log('Firestore query erfolgreich initialisiert.');
+      console.log('Firestore Query erfolgreich initialisiert.');
     } catch (error) {
-      console.error('Error beim initialisieren der Firestore Query:', error);
+      console.error('Error beim Initialisieren der Query', error);
     }
+  }
+
+  ionViewWillEnter() {
+    this.author = localStorage.getItem('username') || 'Anonym';
+  }
+
+  async sendMessage() {
+    if (this.newMessage.trim().length === 0) return;
+
+    const messagesCollection = collection(this.firestore, 'room_1');
+    console.log('sendMessage', this.newMessage);
+
+    await addDoc(messagesCollection, {
+      author: this.author,
+      text: this.newMessage,
+      timestamp: serverTimestamp()
+    });
+
+    console.log('Nachricht erfolgreich gesendet');
+
+    this.newMessage = '';
   }
 }

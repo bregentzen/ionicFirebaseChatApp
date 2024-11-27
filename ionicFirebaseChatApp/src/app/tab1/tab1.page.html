@@ -21,4 +21,11 @@
       </ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-footer class="sticky-footer">
+    <ion-item>
+      <ion-input [(ngModel)]="newMessage" placeholder="Type your message..."></ion-input>
+      <ion-button expand="full" (click)="sendMessage()">Send</ion-button>
+    </ion-item>
+  </ion-footer>
 </ion-content>
