@@ -19,8 +19,13 @@ export class Tab1Page implements OnInit {
   constructor(private firestore: Firestore) {}
 
   ngOnInit() {
-    const messagesCollection = collection(this.firestore, 'room_0');
-    const messagesQuery = query(messagesCollection, orderBy('timestamp'));
-    this.messages$ = collectionData(messagesQuery, { idField: 'id' }) as Observable<Message[]>;
+    try {
+      const messagesCollection = collection(this.firestore, 'room_0');
+      const messagesQuery = query(messagesCollection, orderBy('timestamp'));
+      this.messages$ = collectionData(messagesQuery, { idField: 'id' }) as Observable<Message[]>;
+      console.log('Firestore query erfolgreich initialisiert.');
+    } catch (error) {
+      console.error('Error beim initialisieren der Firestore Query:', error);
+    }
   }
 }
