@@ -32,6 +32,7 @@ export class Tab2Page implements OnInit {
         console.log('Nutzername noch nicht vergeben');
 
         localStorage.setItem('username', this.username);
+        alert('Nutzername erfolgreich gespeichert');
         console.log('Nutzername erfolgreich gespeichert');
 
         this.usernameError = null;
